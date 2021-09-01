@@ -4,8 +4,16 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web.Resource;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+using DataLayer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BackendUndergradFinal.Controllers
 {
@@ -14,6 +22,10 @@ namespace BackendUndergradFinal.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+        private readonly UserManager<MyAppUser> _userManager;
+        private readonly RoleManager<IdentityRole<Guid>> _roleManager;
+        private IConfiguration _config;
+
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -24,24 +36,43 @@ namespace BackendUndergradFinal.Controllers
         // The Web API will only accept tokens 1) for users, and 2) having the "access_as_user" scope for this API
         static readonly string[] scopeRequiredByApi = new string[] { "access_as_user" };
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, UserManager<MyAppUser> userManager, RoleManager<IdentityRole<Guid>> roleManager, IConfiguration config)
         {
             _logger = logger;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _config = config;
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public IActionResult Get()
         {
-            //HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
 
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            
+
+            var token = new JwtSecurityToken(_config["Jwt:Issuer"],
+                _config["Jwt:Issuer"],
+                new[]{new Claim(ClaimTypes.Role, "Admin")},
+                expires: DateTime.Now.AddDays(120),
+                signingCredentials: credentials);
+            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+        }
+
+        [HttpGet("auth")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Get2()
+        {
+            return Ok();
+        }
+
+        [HttpGet("auth2")]
+        [Authorize(Roles = "Boris")]
+        public IActionResult Get3()
+        {
+            return Ok();
         }
     }
 }
