@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataLayer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BackendUndergradFinal
@@ -33,7 +34,8 @@ namespace BackendUndergradFinal
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<MyEfDbContext>();
+            services.AddDbContext<MyEfDbContext>(options => 
+                options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddIdentity<MyAppUser, IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<MyEfDbContext>()
                 .AddDefaultTokenProviders();
@@ -77,7 +79,7 @@ namespace BackendUndergradFinal
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() || env.IsEnvironment("Local"))
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger(c => c.RouteTemplate = "api/swagger/{documentName}/swagger.json");

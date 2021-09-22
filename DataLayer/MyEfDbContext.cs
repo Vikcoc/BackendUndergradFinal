@@ -13,10 +13,18 @@ namespace DataLayer
     {
         public DbSet<TestClass> TestClasses { get; set; }
 
+        public MyEfDbContext()
+        {
+        }
+
+        public MyEfDbContext(DbContextOptions options) : base(options)
+        {
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseSqlServer(
-                "Server=DESKTOP-U28TOVR;Initial Catalog=databasename;User id=sa;Password=Abcd_1234;");
+            //options.UseSqlServer(
+            //    "Server=DESKTOP-U28TOVR;Initial Catalog=databasename;User id=sa;Password=Abcd_1234;");
         }
     }
 }

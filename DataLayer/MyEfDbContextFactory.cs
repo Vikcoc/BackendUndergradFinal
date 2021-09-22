@@ -11,7 +11,9 @@ namespace DataLayer
     {
         public MyEfDbContext CreateDbContext()
         {
-            return new MyEfDbContext();
+            DbContextOptionsBuilder x = new DbContextOptionsBuilder();
+            x.UseSqlServer();
+            return new MyEfDbContext(x.Options);
         }
     }
 }
