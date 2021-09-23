@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -73,6 +74,12 @@ namespace BackendUndergradFinal.Controllers
         public IActionResult Get3()
         {
             return Ok();
+        }
+
+        [HttpGet("path")]
+        public IActionResult Get4()
+        {
+            return Ok(Directory.GetCurrentDirectory());
         }
     }
 }
