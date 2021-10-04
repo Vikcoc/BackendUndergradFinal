@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataLayer;
+using DataLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -35,8 +36,16 @@ namespace BackendUndergradFinal
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<MyEfDbContext>(options => 
-                options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
-            services.AddIdentity<MyAppUser, IdentityRole<Guid>>()
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddIdentity<WaterUser, IdentityRole<Guid>>(opt =>
+                {
+                    opt.Password.RequireDigit = false;
+                    opt.Password.RequireLowercase = false;
+                    opt.Password.RequireNonAlphanumeric = false;
+                    opt.Password.RequireUppercase = false;
+                    opt.Password.RequiredUniqueChars = 0;
+                    opt.Password.RequiredLength = 8;
+                })
                 .AddEntityFrameworkStores<MyEfDbContext>()
                 .AddDefaultTokenProviders();
 

@@ -8,10 +8,12 @@ using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using DataLayer;
+using DataLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -23,7 +25,7 @@ namespace BackendUndergradFinal.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private readonly UserManager<MyAppUser> _userManager;
+        private readonly UserManager<WaterUser> _userManager;
         private readonly RoleManager<IdentityRole<Guid>> _roleManager;
         private IConfiguration _config;
 
@@ -37,7 +39,7 @@ namespace BackendUndergradFinal.Controllers
         // The Web API will only accept tokens 1) for users, and 2) having the "access_as_user" scope for this API
         static readonly string[] scopeRequiredByApi = new string[] { "access_as_user" };
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, UserManager<MyAppUser> userManager, RoleManager<IdentityRole<Guid>> roleManager, IConfiguration config)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, UserManager<WaterUser> userManager, RoleManager<IdentityRole<Guid>> roleManager, IConfiguration config)
         {
             _logger = logger;
             _userManager = userManager;
@@ -80,6 +82,11 @@ namespace BackendUndergradFinal.Controllers
         public IActionResult Get4()
         {
             return Ok(Directory.GetCurrentDirectory());
+        }
+        [HttpGet("reflections")]
+        public IActionResult Get5()
+        {
+            return Ok();
         }
     }
 }

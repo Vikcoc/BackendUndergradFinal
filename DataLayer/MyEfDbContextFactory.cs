@@ -16,10 +16,10 @@ namespace DataLayer
         {
             IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(Path.GetFullPath(@"..\BackendUndergradFinal"))
-                .AddJsonFile($"appsettings.Local.json", true)
+                .AddJsonFile("appsettings.Local.json", true)
                 .Build();
             DbContextOptionsBuilder x = new DbContextOptionsBuilder();
-            x.UseSqlServer(configuration["ConnectionStrings:DefaultConnection"]);
+            x.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             return new MyEfDbContext(x.Options);
         }
     }

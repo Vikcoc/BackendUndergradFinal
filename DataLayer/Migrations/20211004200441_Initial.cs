@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataLayer.Migrations
 {
-    public partial class WithIdentity : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,7 +26,8 @@ namespace DataLayer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Test = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -48,6 +49,37 @@ namespace DataLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WaterSourcePlaces",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Latitude = table.Column<decimal>(type: "decimal(7,5)", nullable: false),
+                    Longitude = table.Column<decimal>(type: "decimal(7,5)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WaterSourcePlaces", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WaterSourceVariants",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WaterSourceVariants", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -65,7 +97,7 @@ namespace DataLayer.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -86,7 +118,7 @@ namespace DataLayer.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -106,7 +138,7 @@ namespace DataLayer.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -124,13 +156,13 @@ namespace DataLayer.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -150,7 +182,71 @@ namespace DataLayer.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WaterSourceContributions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WaterUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WaterSourcePlaceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ContributionType = table.Column<int>(type: "int", nullable: false),
+                    Details = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    RelatedContributionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WaterSourceContributions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WaterSourceContributions_AspNetUsers_WaterUserId",
+                        column: x => x.WaterUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_WaterSourceContributions_WaterSourcePlaces_RelatedContributionId",
+                        column: x => x.RelatedContributionId,
+                        principalTable: "WaterSourcePlaces",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_WaterSourceContributions_WaterSourcePlaces_WaterSourcePlaceId",
+                        column: x => x.WaterSourcePlaceId,
+                        principalTable: "WaterSourcePlaces",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WaterSourcePictures",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Uri = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    WaterSourceVariantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    WaterSourcePlaceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WaterSourcePictures", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WaterSourcePictures_WaterSourcePlaces_WaterSourcePlaceId",
+                        column: x => x.WaterSourcePlaceId,
+                        principalTable: "WaterSourcePlaces",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_WaterSourcePictures_WaterSourceVariants_WaterSourceVariantId",
+                        column: x => x.WaterSourceVariantId,
+                        principalTable: "WaterSourceVariants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -191,6 +287,36 @@ namespace DataLayer.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WaterSourceContributions_RelatedContributionId",
+                table: "WaterSourceContributions",
+                column: "RelatedContributionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WaterSourceContributions_WaterSourcePlaceId",
+                table: "WaterSourceContributions",
+                column: "WaterSourcePlaceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WaterSourceContributions_WaterUserId",
+                table: "WaterSourceContributions",
+                column: "WaterUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WaterSourcePictures_WaterSourcePlaceId",
+                table: "WaterSourcePictures",
+                column: "WaterSourcePlaceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WaterSourcePictures_WaterSourceVariantId",
+                table: "WaterSourcePictures",
+                column: "WaterSourceVariantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WaterSourcePlaces_Latitude_Longitude",
+                table: "WaterSourcePlaces",
+                columns: new[] { "Latitude", "Longitude" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -211,10 +337,22 @@ namespace DataLayer.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "WaterSourceContributions");
+
+            migrationBuilder.DropTable(
+                name: "WaterSourcePictures");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "WaterSourcePlaces");
+
+            migrationBuilder.DropTable(
+                name: "WaterSourceVariants");
         }
     }
 }

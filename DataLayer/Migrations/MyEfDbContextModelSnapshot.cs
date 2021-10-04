@@ -19,7 +19,131 @@ namespace DataLayer.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("DataLayer.MyAppUser", b =>
+            modelBuilder.Entity("DataLayer.Entities.WaterSourceContribution", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ContributionType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<Guid?>("RelatedContributionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WaterSourcePlaceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WaterUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RelatedContributionId");
+
+                    b.HasIndex("WaterSourcePlaceId");
+
+                    b.HasIndex("WaterUserId");
+
+                    b.ToTable("WaterSourceContributions");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.WaterSourcePicture", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Uri")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid?>("WaterSourcePlaceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("WaterSourceVariantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WaterSourcePlaceId");
+
+                    b.HasIndex("WaterSourceVariantId");
+
+                    b.ToTable("WaterSourcePictures");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.WaterSourcePlace", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Latitude")
+                        .HasColumnType("decimal(7,5)");
+
+                    b.Property<decimal>("Longitude")
+                        .HasColumnType("decimal(7,5)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Latitude", "Longitude");
+
+                    b.ToTable("WaterSourcePlaces");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.WaterSourceVariant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WaterSourceVariants");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.WaterUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,6 +155,12 @@ namespace DataLayer.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -65,9 +195,6 @@ namespace DataLayer.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Test")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -86,20 +213,6 @@ namespace DataLayer.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("DataLayer.TestClass", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TestClasses");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -231,30 +344,73 @@ namespace DataLayer.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("DataLayer.Entities.WaterSourceContribution", b =>
+                {
+                    b.HasOne("DataLayer.Entities.WaterSourcePlace", "RelatedContribution")
+                        .WithMany()
+                        .HasForeignKey("RelatedContributionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("DataLayer.Entities.WaterSourcePlace", "WaterSourcePlace")
+                        .WithMany()
+                        .HasForeignKey("WaterSourcePlaceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("DataLayer.Entities.WaterUser", "WaterUser")
+                        .WithMany()
+                        .HasForeignKey("WaterUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("RelatedContribution");
+
+                    b.Navigation("WaterSourcePlace");
+
+                    b.Navigation("WaterUser");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.WaterSourcePicture", b =>
+                {
+                    b.HasOne("DataLayer.Entities.WaterSourcePlace", "WaterSourcePlace")
+                        .WithMany("Pictures")
+                        .HasForeignKey("WaterSourcePlaceId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("DataLayer.Entities.WaterSourceVariant", "WaterSourceVariant")
+                        .WithMany("Pictures")
+                        .HasForeignKey("WaterSourceVariantId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("WaterSourcePlace");
+
+                    b.Navigation("WaterSourceVariant");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("DataLayer.MyAppUser", null)
+                    b.HasOne("DataLayer.Entities.WaterUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("DataLayer.MyAppUser", null)
+                    b.HasOne("DataLayer.Entities.WaterUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -263,23 +419,33 @@ namespace DataLayer.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("DataLayer.MyAppUser", null)
+                    b.HasOne("DataLayer.Entities.WaterUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("DataLayer.MyAppUser", null)
+                    b.HasOne("DataLayer.Entities.WaterUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.WaterSourcePlace", b =>
+                {
+                    b.Navigation("Pictures");
+                });
+
+            modelBuilder.Entity("DataLayer.Entities.WaterSourceVariant", b =>
+                {
+                    b.Navigation("Pictures");
                 });
 #pragma warning restore 612, 618
         }
