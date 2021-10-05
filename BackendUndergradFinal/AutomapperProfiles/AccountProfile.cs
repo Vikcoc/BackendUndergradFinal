@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Communication;
+using Communication.AccountDto;
 using DataLayer.Entities;
 
 namespace BackendUndergradFinal.AutoMapperProfiles

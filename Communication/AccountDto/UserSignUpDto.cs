@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Communication
+namespace Communication.AccountDto
 {
     public class UserSignUpDto
     {
-        [MaxLength(80)]
-        public string Username { get; set; }
         [MaxLength(80)]
         [Required]
         [DataType(DataType.EmailAddress)]

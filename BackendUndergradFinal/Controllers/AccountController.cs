@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Communication;
+using Communication.AccountDto;
 using DataLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using Services;
