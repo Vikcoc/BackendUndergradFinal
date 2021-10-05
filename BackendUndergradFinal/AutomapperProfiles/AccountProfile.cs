@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using Communication;
+using DataLayer.Entities;
+
+namespace BackendUndergradFinal.AutoMapperProfiles
+{
+    public class AccountProfile : Profile
+    {
+        public AccountProfile()
+        {
+            CreateMap<UserSignUpDto, WaterUser>();
+        }
+    }
+}

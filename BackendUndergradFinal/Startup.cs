@@ -15,11 +15,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BackendUndergradFinal.AutoMapperProfiles;
 using DataLayer;
 using DataLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Services;
 
 namespace BackendUndergradFinal
 {
@@ -35,7 +37,7 @@ namespace BackendUndergradFinal
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<MyEfDbContext>(options => 
+            services.AddDbContext<MyEfDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<WaterUser, IdentityRole<Guid>>(opt =>
                 {
@@ -50,7 +52,8 @@ namespace BackendUndergradFinal
                 .AddDefaultTokenProviders();
 
 
-            services.AddAuthentication(options => {
+            services.AddAuthentication(options =>
+                {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -70,19 +73,17 @@ namespace BackendUndergradFinal
                 });
 
             services.AddAuthorization();
-
-
-
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //    .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "BackendUndergradFinal", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "BackendUndergradFinal", Version = "v1"});
+            });
+            services.AddAutoMapper(opt =>
+            {
+                opt.AddProfile<AccountProfile>();
             });
 
-            
+            services.AddScoped<WaterUserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -103,14 +104,30 @@ namespace BackendUndergradFinal
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+
+
+            var roleManager =
+                (RoleManager<IdentityRole<Guid>>) app.ApplicationServices.GetService(
+                    typeof(RoleManager<IdentityRole<Guid>>));
+            if (!roleManager.Roles.Any())
             {
-                endpoints.MapControllers();
-            });
+                var role = new IdentityRole<Guid>
+                {
+                    Name = "Admin"
+                };
+                var res = roleManager.CreateAsync(role).Result;
+                role = new IdentityRole<Guid>
+                {
+                    Name = "User"
+                };
+                res = roleManager.CreateAsync(role).Result;
+            }
         }
     }
 }

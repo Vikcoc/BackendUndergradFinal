@@ -52,7 +52,7 @@ namespace DataLayer
 
                 var param = Expression.Parameter(type);
                 var filter = Expression.Lambda(
-                    Expression.Equal(Expression.Property(param, ((MemberExpression)((BinaryExpression)expression.Body).Left).Member.Name), ((BinaryExpression)expression.Body).Right),
+                    Expression.MakeBinary(((BinaryExpression)expression.Body).NodeType, Expression.Property(param, ((MemberExpression)((BinaryExpression)expression.Body).Left).Member.Name), ((BinaryExpression)expression.Body).Right),
                         param);
 
                 builder.Entity(type).HasQueryFilter(filter);
