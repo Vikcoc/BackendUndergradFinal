@@ -32,5 +32,11 @@ namespace BackendUndergradFinal.Controllers
             await _user.CreateUserAsync(_mapper.Map<WaterUser>(userDto), userDto.Password);
             return Ok();
         }
+
+        [HttpPost("sign_in")]
+        public async Task<IActionResult> SignInAsync(UserSignInDto userDto)
+        {
+            return Ok(await _user.SignInAsync(userDto.Email, userDto.Password));
+        }
     }
 }

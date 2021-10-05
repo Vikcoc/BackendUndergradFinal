@@ -62,7 +62,7 @@ namespace BackendUndergradFinal.Controllers
         }
 
         [HttpGet("auth2")]
-        [Authorize(Roles = "Boris")]
+        [Authorize(Roles = "User")]
         public IActionResult Get3()
         {
             return Ok();
