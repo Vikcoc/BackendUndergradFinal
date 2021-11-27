@@ -127,7 +127,7 @@ namespace BackendUndergradFinal
                 });
             });
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
@@ -136,7 +136,12 @@ namespace BackendUndergradFinal
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
-
+            app.UseCors(x =>
+            {
+                x.AllowAnyHeader();
+                x.AllowAnyMethod();
+                x.AllowAnyOrigin();
+            });
 
             var roleManager =
                 (RoleManager<IdentityRole<Guid>>) app.ApplicationServices.GetService(

@@ -9,13 +9,14 @@ using Communication;
 using Communication.AccountDto;
 using DataLayer.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Services;
 
 namespace BackendUndergradFinal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : Controller
+    public class AccountController : ControllerWithError
     {
         private readonly WaterUserService _user;
         private readonly IMapper _mapper;
