@@ -35,6 +35,9 @@ namespace DataLayer
             builder.AddQueryFilter<WaterUser>(x => x.DeletedAt == null);
             builder.AddQueryFilter<BaseEntity>(x => x.DeletedAt == null);
 
+            builder.Entity<WaterSourceVariant>().HasData(new WaterSourceVariant { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), CreatedAt = DateTime.UtcNow, Name = "Classic", Description = "Simple style but effective at quenching thirst"});
+            builder.Entity<WaterSourcePicture>().HasData(new WaterSourcePicture { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), CreatedAt = DateTime.UtcNow, Uri = "Pictures/Default/Classic1.jpg", WaterSourceVariantId = Guid.Parse("00000000-0000-0000-0000-000000000001") });
+
         }
 
 
