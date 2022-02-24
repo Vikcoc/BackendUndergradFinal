@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataLayer;
+using DataLayer.Entities;
+using Microsoft.AspNetCore.Http;
 using Services.Exceptions;
+using Guid = System.Guid;
 
 namespace Services
 {
@@ -24,6 +28,27 @@ namespace Services
             if (img == default || !File.Exists(img.Uri))
                 throw new BadRequestException(ErrorStrings.NoImageEntry);
             return new FileStream(img.Uri, FileMode.Open, FileAccess.Read);
+        }
+
+        public async Task<Guid> AddPhotoAsync(IFormFile file)
+        {
+            var path = Path.Combine("Pictures", "User");
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            path = Path.Combine(path, Guid.NewGuid() + Path.GetExtension(file.FileName));
+
+            await using var stream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
+            await file.OpenReadStream().CopyToAsync(stream);
+            stream.Close();
+            var pic = new WaterSourcePicture
+            {
+                Uri = path
+            };
+            await _dbContext.WaterSourcePictures.AddAsync(pic);
+            await _dbContext.SaveChangesAsync();
+            return pic.Id;
         }
     }
 }
