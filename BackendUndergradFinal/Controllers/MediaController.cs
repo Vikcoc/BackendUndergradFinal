@@ -28,7 +28,6 @@ namespace BackendUndergradFinal.Controllers
         }
 
         [HttpPost]
-        [Route("media/one")]
         [Microsoft.AspNetCore.Mvc.RequestSizeLimit(51486000)]
         public async Task<ActionResult<Guid>> PostToAwsAsync(IFormFile file)
         {

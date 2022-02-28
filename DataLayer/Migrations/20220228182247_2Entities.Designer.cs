@@ -4,14 +4,16 @@ using DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(MyEfDbContext))]
-    partial class MyEfDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220228182247_2Entities")]
+    partial class _2Entities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,21 +94,21 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000001"),
-                            CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc).AddTicks(935),
                             Uri = "Pictures/Default/Classic1.jpg",
                             WaterSourceVariantId = new Guid("00000000-0000-0000-0000-000000000001")
                         },
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000002"),
-                            CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc).AddTicks(2367),
                             Uri = "Pictures/Default/Dog1.jpg",
                             WaterSourceVariantId = new Guid("00000000-0000-0000-0000-000000000002")
                         },
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000003"),
-                            CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc).AddTicks(2418),
                             Uri = "Pictures/Default/OldTime1.jpg",
                             WaterSourceVariantId = new Guid("00000000-0000-0000-0000-000000000003")
                         });
@@ -169,21 +171,21 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000001"),
-                            CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 42, DateTimeKind.Utc).AddTicks(1162),
                             Description = "Simple style but effective at quenching thirst",
                             Name = "Classic"
                         },
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000002"),
-                            CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc).AddTicks(2292),
                             Description = "Now with design for dogs",
                             Name = "Doggie"
                         },
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000003"),
-                            CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc).AddTicks(2394),
                             Description = "Imagined in another time",
                             Name = "Old time"
                         });

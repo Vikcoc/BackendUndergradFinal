@@ -35,8 +35,14 @@ namespace DataLayer
             builder.AddQueryFilter<WaterUser>(x => x.DeletedAt == null);
             builder.AddQueryFilter<BaseEntity>(x => x.DeletedAt == null);
 
-            builder.Entity<WaterSourceVariant>().HasData(new WaterSourceVariant { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), CreatedAt = DateTime.UtcNow, Name = "Classic", Description = "Simple style but effective at quenching thirst"});
-            builder.Entity<WaterSourcePicture>().HasData(new WaterSourcePicture { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), CreatedAt = DateTime.UtcNow, Uri = "Pictures/Default/Classic1.jpg", WaterSourceVariantId = Guid.Parse("00000000-0000-0000-0000-000000000001") });
+            builder.Entity<WaterSourceVariant>().HasData(new WaterSourceVariant { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc), Name = "Classic", Description = "Simple style but effective at quenching thirst"});
+            builder.Entity<WaterSourcePicture>().HasData(new WaterSourcePicture { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc), Uri = "Pictures/Default/Classic1.jpg", WaterSourceVariantId = Guid.Parse("00000000-0000-0000-0000-000000000001") });
+
+            builder.Entity<WaterSourceVariant>().HasData(new WaterSourceVariant { Id = Guid.Parse("00000000-0000-0000-0000-000000000002"), CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc), Name = "Doggie", Description = "Now with design for dogs"});
+            builder.Entity<WaterSourcePicture>().HasData(new WaterSourcePicture { Id = Guid.Parse("00000000-0000-0000-0000-000000000002"), CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc), Uri = "Pictures/Default/Dog1.jpg", WaterSourceVariantId = Guid.Parse("00000000-0000-0000-0000-000000000002") });
+            
+            builder.Entity<WaterSourceVariant>().HasData(new WaterSourceVariant { Id = Guid.Parse("00000000-0000-0000-0000-000000000003"), CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc), Name = "Old time", Description = "Imagined in another time"});
+            builder.Entity<WaterSourcePicture>().HasData(new WaterSourcePicture { Id = Guid.Parse("00000000-0000-0000-0000-000000000003"), CreatedAt = new DateTime(2022, 2, 28, 18, 22, 47, 43, DateTimeKind.Utc), Uri = "Pictures/Default/OldTime1.jpg", WaterSourceVariantId = Guid.Parse("00000000-0000-0000-0000-000000000003") });
 
         }
 

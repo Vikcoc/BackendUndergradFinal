@@ -35,9 +35,13 @@ namespace Services
                 if (result.Errors.Select(e => e.Code)
                     .Any(e => new List<string> {"DuplicateUserName", "DuplicateEmail"}.Contains(e)))
                     throw new BadRequestException(ErrorStrings.EmailAlreadyInUse);
-                throw new Exception(result.Errors.FirstOrDefault()?.Code);
+                throw new Exception(result.Errors.Select(x => x.Description).Aggregate((x, y) => x + "\n" + y));
             }
-            await _manager.AddToRoleAsync(user, "User");
+            var result2 = await _manager.AddToRoleAsync(user, "User");
+            if (!result2.Succeeded)
+            {
+                throw new Exception(result2.Errors.Select(x => x.Description).Aggregate((x, y) => x + "\n" + y));
+            }
         }
 
         public async Task<string> SignInAsync(string email, string password)

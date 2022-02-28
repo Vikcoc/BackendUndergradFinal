@@ -81,11 +81,13 @@ namespace BackendUndergradFinal
             services.AddAutoMapper(opt =>
             {
                 opt.AddProfile<AccountProfile>();
+                opt.AddProfile<SourceVariantProfile>();
             });
 
             // Services
             services.AddScoped<WaterUserService>();
             services.AddScoped<MediaService>();
+            services.AddScoped<WaterSourceVariantService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -160,6 +162,26 @@ namespace BackendUndergradFinal
                     Name = "User"
                 };
                 res = roleManager.CreateAsync(role).Result;
+            }
+
+            var userManager = (UserManager<WaterUser>) app.ApplicationServices.GetService(typeof(UserManager<WaterUser>));
+
+            if (userManager.FindByEmailAsync("admin@waterfountains.com").Result == null)
+            {
+                var admin = new WaterUser
+                {
+                    Email = "admin@waterfountains.com",
+                    UserName = "Admin"
+                };
+                var create = userManager.CreateAsync(admin, "Abcd_1234").Result;
+
+                if (!create.Succeeded)
+                    throw new Exception(create.Errors.Select(x => x.Description).Aggregate((x, y) => x + "\n" + y));
+
+                var res = userManager.AddToRoleAsync(admin, "Admin").Result;
+
+                if (!res.Succeeded)
+                    throw new Exception(res.Errors.Select(x => x.Description).Aggregate((x, y) => x + "\n" + y));
             }
         }
     }
