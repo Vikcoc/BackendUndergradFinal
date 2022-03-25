@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DataLayer;
+﻿using DataLayer;
 using DataLayer.Entities;
 using Microsoft.AspNetCore.Http;
 using Services.Exceptions;
+using System.IO;
+using System.Threading.Tasks;
 using Guid = System.Guid;
 
 namespace Services

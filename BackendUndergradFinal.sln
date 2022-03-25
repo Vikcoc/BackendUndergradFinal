@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackendUndergradFinal", "Ba
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\DataLayer.csproj", "{62606C07-A698-4C85-99DB-2411ED4BF6BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{E4C4EC8A-D094-4670-AABF-8E4EE0E80DA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{E4C4EC8A-D094-4670-AABF-8E4EE0E80DA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communication", "Communication\Communication.csproj", "{D053D6BA-FA9E-4152-AD8B-EAD73F96D682}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Communication", "Communication\Communication.csproj", "{D053D6BA-FA9E-4152-AD8B-EAD73F96D682}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

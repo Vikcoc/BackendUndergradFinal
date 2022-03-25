@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DataLayer;
+﻿using DataLayer;
 using DataLayer.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Services
 {
@@ -20,7 +18,7 @@ namespace Services
 
         public async Task<List<WaterSourceVariant>> GetSourceVariantsWithImageAsync()
         {
-            return await _dbContext.WaterSourceVariants.Include(x => x.Pictures.Take(1)).AsNoTracking().ToListAsync();
+            return await _dbContext.WaterSourceVariants.Include(x => x.Pictures.OrderBy(y => y.Id).Take(1)).AsNoTracking().ToListAsync();
         }
     }
 }

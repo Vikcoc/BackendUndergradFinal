@@ -1,26 +1,26 @@
+using BackendUndergradFinal.AutoMapperProfiles;
+using DataLayer;
+using DataLayer.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using Services;
+using Services.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
-using BackendUndergradFinal.AutoMapperProfiles;
-using DataLayer;
-using DataLayer.Entities;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Services;
-using Newtonsoft.Json;
-using Services.Exceptions;
 
 namespace BackendUndergradFinal
 {
@@ -76,7 +76,7 @@ namespace BackendUndergradFinal
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "BackendUndergradFinal", Version = "v1"});
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "BackendUndergradFinal", Version = "v1" });
             });
             services.AddAutoMapper(opt =>
             {
@@ -148,7 +148,7 @@ namespace BackendUndergradFinal
             });
 
             var roleManager =
-                (RoleManager<IdentityRole<Guid>>) app.ApplicationServices.GetService(
+                (RoleManager<IdentityRole<Guid>>)app.ApplicationServices.GetService(
                     typeof(RoleManager<IdentityRole<Guid>>));
             if (!roleManager.Roles.Any())
             {
@@ -164,7 +164,7 @@ namespace BackendUndergradFinal
                 res = roleManager.CreateAsync(role).Result;
             }
 
-            var userManager = (UserManager<WaterUser>) app.ApplicationServices.GetService(typeof(UserManager<WaterUser>));
+            var userManager = (UserManager<WaterUser>)app.ApplicationServices.GetService(typeof(UserManager<WaterUser>));
 
             if (userManager.FindByEmailAsync("admin@waterfountains.com").Result == null)
             {

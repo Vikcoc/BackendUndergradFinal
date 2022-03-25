@@ -1,12 +1,9 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
 using Services;
 using Services.Exceptions;
+using System;
+using System.Threading.Tasks;
 
 namespace BackendUndergradFinal.Controllers
 {
@@ -35,7 +32,7 @@ namespace BackendUndergradFinal.Controllers
             {
                 throw new BadRequestException(ErrorStrings.InvalidFile);
             }
-            
+
             var result = await _mediaService.AddPhotoAsync(file);
 
             return Ok(result);

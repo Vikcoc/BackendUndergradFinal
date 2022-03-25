@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DataLayer.Entities.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DataLayer.Entities.Enums;
 
 namespace DataLayer.Entities
 {

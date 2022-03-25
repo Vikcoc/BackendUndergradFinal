@@ -1,15 +1,15 @@
-﻿using System;
+﻿using DataLayer.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Services.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using DataLayer.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using Services.Exceptions;
 
 namespace Services
 {
@@ -33,7 +33,7 @@ namespace Services
             if (!result.Succeeded)
             {
                 if (result.Errors.Select(e => e.Code)
-                    .Any(e => new List<string> {"DuplicateUserName", "DuplicateEmail"}.Contains(e)))
+                    .Any(e => new List<string> { "DuplicateUserName", "DuplicateEmail" }.Contains(e)))
                     throw new BadRequestException(ErrorStrings.EmailAlreadyInUse);
                 throw new Exception(result.Errors.Select(x => x.Description).Aggregate((x, y) => x + "\n" + y));
             }
