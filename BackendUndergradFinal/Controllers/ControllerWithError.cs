@@ -14,9 +14,9 @@ namespace BackendUndergradFinal.Controllers
                 context.Result = BadRequest(
                     ModelState
                         .Values
-                        .SelectMany(x => x.Errors
-                            .Select(y => y.ErrorMessage))
-                        .ToList()
+                        .SelectMany(x => x.Errors.Select(y =>
+                            string.IsNullOrWhiteSpace(y.ErrorMessage) ? y.Exception?.Message : y.ErrorMessage))
+                        .Aggregate((x, y) => x + "\n" + y)
                 );
             }
             return base.OnActionExecutionAsync(context, next);

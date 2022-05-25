@@ -125,8 +125,7 @@ namespace BackendUndergradFinal
                         }
 
                         context.Response.ContentType = "application/json";
-                        await context.Response.WriteAsync(JsonConvert.SerializeObject(new List<string>
-                            {contextFeature.Error.Message}));
+                        await context.Response.WriteAsync(JsonConvert.SerializeObject(contextFeature.Error.Message));
                     }
                 });
             });

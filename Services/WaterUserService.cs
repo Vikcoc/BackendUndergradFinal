@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using DataLayer;
 
 namespace Services
 {
@@ -18,17 +19,19 @@ namespace Services
         private readonly UserManager<WaterUser> _manager;
         private readonly SignInManager<WaterUser> _signIn;
         private readonly IConfiguration _config;
+        private readonly MyEfDbContext _context;
 
-        public WaterUserService(UserManager<WaterUser> manager, IConfiguration config, SignInManager<WaterUser> signIn)
+        public WaterUserService(UserManager<WaterUser> manager, IConfiguration config, SignInManager<WaterUser> signIn, MyEfDbContext context)
         {
             _manager = manager;
             _config = config;
             _signIn = signIn;
+            _context = context;
         }
 
         public async Task CreateUserAsync(WaterUser user, string password)
         {
-            user.UserName = user.Email;
+            //user.UserName = user.Email;
             var result = await _manager.CreateAsync(user, password);
             if (!result.Succeeded)
             {
@@ -72,6 +75,11 @@ namespace Services
             }
 
             throw new BadRequestException(ErrorStrings.LoginFail);
+        }
+
+        public async Task<string> GetUserNameAsync(Guid id)
+        {
+            return (await _context.Users.FindAsync(id)).UserName;
         }
     }
 }

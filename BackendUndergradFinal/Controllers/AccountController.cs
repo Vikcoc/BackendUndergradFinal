@@ -1,9 +1,13 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Security.Claims;
+using AutoMapper;
 using Communication.AccountDto;
 using DataLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Services.Exceptions;
 
 namespace BackendUndergradFinal.Controllers
 {
@@ -21,16 +25,26 @@ namespace BackendUndergradFinal.Controllers
         }
 
         [HttpPost("sign_up")]
-        public async Task<IActionResult> SignUpAsync(UserSignUpDto userDto)
+        public async Task<ActionResult<string>> SignUpAsync(UserSignUpDto userDto)
         {
             await _user.CreateUserAsync(_mapper.Map<WaterUser>(userDto), userDto.Password);
-            return Ok();
+            return Ok(await _user.SignInAsync(userDto.Email, userDto.Password));
         }
 
         [HttpPost("sign_in")]
-        public async Task<IActionResult> SignInAsync(UserSignInDto userDto)
+        public async Task<ActionResult<string>> SignInAsync(UserSignInDto userDto)
         {
             return Ok(await _user.SignInAsync(userDto.Email, userDto.Password));
+        }
+
+        [HttpGet("name")]
+        [Authorize]
+        public async Task<ActionResult<string>> GetNameAsync()
+        {
+            var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrWhiteSpace(id))
+                throw new BadRequestException("");
+            return Ok(await _user.GetUserNameAsync(Guid.Parse(id)));
         }
     }
 }
