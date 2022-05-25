@@ -2,27 +2,25 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
-namespace DataLayer.Entities
+namespace Communication.SourcePlaceDto
 {
-    public class WaterSourcePlace : BaseEntity
+    public class WaterSourcePlaceCreateDto
     {
         [MaxLength(50)]
+        [Required]
         public string Nickname { get; set; }
         [MaxLength(200)]
+        [Required]
         public string Address { get; set; }
-        [Column(TypeName = "decimal(7, 5)")]
+        [Required]
         public decimal Latitude { get; set; }
-        [Column(TypeName = "decimal(7, 5)")]
+        [Required]
         public decimal Longitude { get; set; }
+        [Required]
         public Guid WaterSourceVariantId { get; set; }
-        public WaterSourceVariant WaterSourceVariant { get; set; }
-        public List<WaterSourcePicture> Pictures { get; set; }
-
-
-        public WaterSourcePlace()
-        {
-            Pictures = new List<WaterSourcePicture>();
-        }
+        [Required]
+        public List<Guid> Pictures { get; set; }
     }
 }

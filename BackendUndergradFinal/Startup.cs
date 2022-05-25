@@ -52,12 +52,12 @@ namespace BackendUndergradFinal
                 .AddDefaultTokenProviders();
 
 
-            services.AddAuthentication(options =>
-                {
+            services.AddAuthentication(options => 
+                    {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
+                    })
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -82,12 +82,15 @@ namespace BackendUndergradFinal
             {
                 opt.AddProfile<AccountProfile>();
                 opt.AddProfile<SourceVariantProfile>();
+                opt.AddProfile<SourcePlaceProfile>();
+                opt.AddProfile<SourceContributionProfile>();
             });
 
             // Services
             services.AddScoped<WaterUserService>();
             services.AddScoped<MediaService>();
             services.AddScoped<WaterSourceVariantService>();
+            services.AddScoped<WaterSourcePlaceService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -114,15 +117,11 @@ namespace BackendUndergradFinal
                     {
                         context.Items["Exception"] = contextFeature.Error.Message;
                         context.Items["StackTrace"] = contextFeature.Error.StackTrace;
-                        switch (contextFeature.Error)
+                        context.Response.StatusCode = contextFeature.Error switch
                         {
-                            case BadRequestException _:
-                                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                                break;
-                            default:
-                                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                                break;
-                        }
+                            BadRequestException _ => (int)HttpStatusCode.BadRequest,
+                            _ => (int)HttpStatusCode.InternalServerError
+                        };
 
                         context.Response.ContentType = "application/json";
                         await context.Response.WriteAsync(JsonConvert.SerializeObject(contextFeature.Error.Message));

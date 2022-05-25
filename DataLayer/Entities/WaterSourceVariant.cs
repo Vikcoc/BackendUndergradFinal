@@ -10,10 +10,12 @@ namespace DataLayer.Entities
         [MaxLength(500)]
         public string Description { get; set; }
         public List<WaterSourcePicture> Pictures { get; set; }
+        public List<WaterSourcePlace> Placements { get; set; }
 
         public WaterSourceVariant()
         {
             Pictures = new List<WaterSourcePicture>();
+            Placements = new List<WaterSourcePlace>();
         }
 
     }

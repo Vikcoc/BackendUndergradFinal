@@ -41,9 +41,7 @@ namespace BackendUndergradFinal.Controllers
         [Authorize]
         public async Task<ActionResult<string>> GetNameAsync()
         {
-            var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrWhiteSpace(id))
-                throw new BadRequestException("");
+            var id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             return Ok(await _user.GetUserNameAsync(Guid.Parse(id)));
         }
     }
