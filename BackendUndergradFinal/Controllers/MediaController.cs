@@ -26,14 +26,14 @@ namespace BackendUndergradFinal.Controllers
 
         [HttpPost]
         [Microsoft.AspNetCore.Mvc.RequestSizeLimit(51486000)]
-        public async Task<ActionResult<Guid>> PostToAwsAsync(IFormFile file)
+        public async Task<ActionResult<Guid>> PostImageAsync(IFormFile picture)
         {
-            if (file.ContentType != "image/jpeg" && file.ContentType != "image/png")
+            if (picture.ContentType != "image/jpeg" && picture.ContentType != "image/png")
             {
                 throw new BadRequestException(ErrorStrings.InvalidFile);
             }
 
-            var result = await _mediaService.AddPhotoAsync(file);
+            var result = await _mediaService.AddPhotoAsync(picture);
 
             return Ok(result);
         }
