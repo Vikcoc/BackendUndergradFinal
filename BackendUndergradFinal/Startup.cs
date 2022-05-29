@@ -91,6 +91,7 @@ namespace BackendUndergradFinal
             services.AddScoped<MediaService>();
             services.AddScoped<WaterSourceVariantService>();
             services.AddScoped<WaterSourcePlaceService>();
+            services.AddScoped<WaterSourceContributionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

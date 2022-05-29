@@ -21,6 +21,7 @@ namespace Communication.SourcePlaceDto
         [Required]
         public Guid WaterSourceVariantId { get; set; }
         [Required]
+        [MinLength(1)]
         public List<Guid> Pictures { get; set; }
     }
 }

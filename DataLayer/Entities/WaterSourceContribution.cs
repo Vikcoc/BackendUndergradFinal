@@ -14,6 +14,6 @@ namespace DataLayer.Entities
         [MaxLength(200)]
         public string Details { get; set; }
         public Guid? RelatedContributionId { get; set; }
-        public WaterSourcePlace RelatedContribution { get; set; }
+        public WaterSourceContribution RelatedContribution { get; set; }
     }
 }

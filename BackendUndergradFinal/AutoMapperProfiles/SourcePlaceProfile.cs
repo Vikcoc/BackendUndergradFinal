@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using Communication.SourcePlaceDto;
 using DataLayer.Entities;
 
@@ -10,6 +11,10 @@ namespace BackendUndergradFinal.AutoMapperProfiles
         {
             CreateMap<WaterSourcePlaceCreateDto, WaterSourcePlace>()
                 .ForMember(x => x.Pictures, x => x.Ignore());
+            CreateMap<WaterSourcePlace, WaterSourcePlaceListingDto>()
+                .ForMember(x => x.Picture,
+                    x => x.MapFrom(y => y.Pictures.FirstOrDefault().Id));
+
         }
     }
 }

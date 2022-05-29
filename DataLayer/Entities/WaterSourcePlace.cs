@@ -17,12 +17,16 @@ namespace DataLayer.Entities
         public decimal Longitude { get; set; }
         public Guid WaterSourceVariantId { get; set; }
         public WaterSourceVariant WaterSourceVariant { get; set; }
+        [MinLength(1)]
         public List<WaterSourcePicture> Pictures { get; set; }
+        [MinLength(1)]
+        public List<WaterSourceContribution> Contributions { get; set; }
 
 
         public WaterSourcePlace()
         {
             Pictures = new List<WaterSourcePicture>();
+            Contributions = new List<WaterSourceContribution>();
         }
     }
 }
