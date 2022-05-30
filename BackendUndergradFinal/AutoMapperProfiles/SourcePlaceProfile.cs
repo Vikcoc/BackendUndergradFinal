@@ -14,6 +14,10 @@ namespace BackendUndergradFinal.AutoMapperProfiles
             CreateMap<WaterSourcePlace, WaterSourcePlaceListingDto>()
                 .ForMember(x => x.Picture,
                     x => x.MapFrom(y => y.Pictures.FirstOrDefault().Id));
+            CreateMap<WaterSourcePlace, WaterSourcePlaceListingWithContributionDto>()
+                .ForMember(x => x.Picture,
+                    x => x.MapFrom(y => y.Pictures.FirstOrDefault().Id))
+                .ForMember(x => x.Contribution, x => x.MapFrom(y => y.Contributions.FirstOrDefault()));
 
         }
     }

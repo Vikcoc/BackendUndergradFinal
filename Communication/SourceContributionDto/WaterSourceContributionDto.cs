@@ -7,6 +7,7 @@ namespace Communication.SourceContributionDto
 {
     public class WaterSourceContributionDto
     {
+        public Guid Id { get; set; }
         public Guid WaterUserId { get; set; }
         public Guid WaterSourcePlaceId { get; set; }
         public ContributionTypeDto ContributionType { get; set; }

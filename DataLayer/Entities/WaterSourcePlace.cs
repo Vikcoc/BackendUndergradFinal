@@ -11,9 +11,9 @@ namespace DataLayer.Entities
         public string Nickname { get; set; }
         [MaxLength(200)]
         public string Address { get; set; }
-        [Column(TypeName = "decimal(7, 5)")]
+        [Column(TypeName = "decimal(9, 6)")]
         public decimal Latitude { get; set; }
-        [Column(TypeName = "decimal(7, 5)")]
+        [Column(TypeName = "decimal(9, 6)")]
         public decimal Longitude { get; set; }
         public Guid WaterSourceVariantId { get; set; }
         public WaterSourceVariant WaterSourceVariant { get; set; }

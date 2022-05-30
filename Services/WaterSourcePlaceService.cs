@@ -43,5 +43,38 @@ namespace Services
                 throw;
             }
         }
+
+        public async Task<List<WaterSourcePlace>> GetInRectangleAsync(decimal left, decimal bottom, decimal right,
+            decimal top)
+        {
+            return await _dbContext.WaterSourcePlaces
+                .Where(x => /*Contains(x.Latitude, x.Longitude, left, bottom, right, top)*/
+                    bottom <= x.Latitude && x.Latitude <= top
+                        && (left <= right
+                        ? left <= x.Longitude && x.Longitude <= right
+                        : left <= x.Longitude || x.Longitude <= right)
+                )
+                .Include(x => x.Pictures.OrderBy(y => y.CreatedAt).Take(1))
+                .Include(x => x.Contributions.OrderByDescending(y => y.CreatedAt))
+                .ToListAsync();
+        }
+
+        public static bool Contains(decimal pointLatitude, decimal pointLongitude, decimal left, decimal bottom, decimal right, decimal top)
+        {
+            // copied from LatLongBounds.contains
+            return bottom <= pointLatitude && pointLatitude <= top && Zza(pointLongitude, left, right);
+        }
+
+        private static bool Zza(decimal pointLongitude, decimal left, decimal right)
+        {
+            if (left <= right)
+            {
+                return left <= pointLongitude && pointLongitude <= right;
+            }
+            else
+            {
+                return left <= pointLongitude || pointLongitude <= right;
+            }
+        }
     }
 }
