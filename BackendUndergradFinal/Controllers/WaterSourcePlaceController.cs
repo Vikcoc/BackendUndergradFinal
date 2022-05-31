@@ -37,14 +37,32 @@ namespace BackendUndergradFinal.Controllers
             return Ok(_mapper.Map<WaterSourceContributionDto>(res));
         }
 
-        [HttpGet("get_in_rectangle/{left}/{bottom}/{right}/{top}")]
-        public async Task<ActionResult> GetInRectangleAsync(decimal left, decimal bottom, decimal right, decimal top)
+        [HttpGet("get_in_rectangle_with_state/{left:decimal}/{bottom:decimal}/{right:decimal}/{top:decimal}")]
+        public async Task<ActionResult<List<WaterSourcePlaceListingWithContributionDto>>> GetInRectangleWithStateAsync(decimal left, decimal bottom, decimal right, decimal top)
         {
-            if (left is < 0 or > 360 || right is < 0 or > 360 || bottom > top || bottom is < -90 or > 90 ||
+            if (left is < -180 or > 180 || right is < -180 or > 180 || bottom > top || bottom is < -90 or > 90 ||
+                top is < -90 or > 90)
+                throw new BadRequestException(ErrorStrings.BadCoordinates);
+            //Console.WriteLine("{0} {1} {2} {3}", left, bottom, right, top);
+            var res = await _waterSourcePlaceService.GetInRectangleWithStateAsync(left, bottom, right, top);
+            return Ok(_mapper.Map<List<WaterSourcePlaceListingWithContributionDto>>(res));
+        }
+
+        [HttpGet("get_in_rectangle/{left:decimal}/{bottom:decimal}/{right:decimal}/{top:decimal}")]
+        public async Task<ActionResult<List<WaterSourcePlaceListingDto>>> GetInRectangleAsync(decimal left, decimal bottom, decimal right, decimal top)
+        {
+            if (left is < -180 or > 180 || right is < -180 or > 180 || bottom > top || bottom is < -90 or > 90 ||
                 top is < -90 or > 90)
                 throw new BadRequestException(ErrorStrings.BadCoordinates);
             var res = await _waterSourcePlaceService.GetInRectangleAsync(left, bottom, right, top);
-            return Ok(_mapper.Map<List<WaterSourcePlaceListingWithContributionDto>>(res));
+            return Ok(_mapper.Map<List<WaterSourcePlaceListingDto>>(res));
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<WaterSourcePlaceListingDto>> GetAsync(Guid id)
+        {
+            var res = await _waterSourcePlaceService.GetAsync(id);
+            return Ok(_mapper.Map<WaterSourcePlaceListingDto>(res));
         }
     }
 }

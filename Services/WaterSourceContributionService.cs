@@ -29,5 +29,15 @@ namespace Services
                 .Take(take)
                 .ToListAsync();
         }
+
+        public async Task<List<WaterSourceContribution>> GetLatestPlaceContributionsAsync(Guid placeId, int skip, int take)
+        {
+            return await _dbContext.WaterSourceContributions
+                .Where(x => x.WaterSourcePlaceId == placeId)
+                .OrderByDescending(x => x.CreatedAt)
+                .Skip(skip)
+                .Take(take)
+                .ToListAsync();
+        }
     }
 }

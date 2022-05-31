@@ -32,5 +32,12 @@ namespace BackendUndergradFinal.Controllers
             var res = await _waterSourceContributionService.GetLatestUserContributionsAsync(id, skip, take);
             return Ok(_mapper.Map<List<WaterSourceContributionWithPlaceDto>>(res));
         }
+
+        [HttpGet("of_place/{placeId:guid}/{skip:int}/{take:int}")]
+        public async Task<ActionResult<List<WaterSourceContributionDto>>> GetPlaceContributionsAsync(Guid placeId, int skip = 0, int take = 30)
+        {
+            var res = await _waterSourceContributionService.GetLatestPlaceContributionsAsync(placeId, skip, take);
+            return Ok(_mapper.Map<List<WaterSourceContributionWithPlaceDto>>(res));
+        }
     }
 }
