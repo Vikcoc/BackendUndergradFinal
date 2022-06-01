@@ -43,7 +43,6 @@ namespace BackendUndergradFinal.Controllers
             if (left is < -180 or > 180 || right is < -180 or > 180 || bottom > top || bottom is < -90 or > 90 ||
                 top is < -90 or > 90)
                 throw new BadRequestException(ErrorStrings.BadCoordinates);
-            //Console.WriteLine("{0} {1} {2} {3}", left, bottom, right, top);
             var res = await _waterSourcePlaceService.GetInRectangleWithStateAsync(left, bottom, right, top);
             return Ok(_mapper.Map<List<WaterSourcePlaceListingWithContributionDto>>(res));
         }

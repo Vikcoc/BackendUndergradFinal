@@ -10,6 +10,7 @@ namespace BackendUndergradFinal.AutoMapperProfiles
         {
             CreateMap<WaterSourceContribution, WaterSourceContributionDto>();
             CreateMap<WaterSourceContribution, WaterSourceContributionWithPlaceDto>();
+            CreateMap<WaterSourceContributionCreateDto, WaterSourceContribution>();
         }
     }
 }
